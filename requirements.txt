@@ -1,1 +1,8 @@
+Flask
+opencv-python
+numpy
+scikit-image
+joblib
+Pillow
+gunicorn
 
