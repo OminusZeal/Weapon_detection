@@ -2,7 +2,7 @@ Flask
 opencv-python
 numpy
 scikit-image
+scikit-learn
 joblib
 Pillow
 gunicorn
-scikit-learn
