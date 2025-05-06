@@ -5,4 +5,4 @@ scikit-image
 joblib
 Pillow
 gunicorn
-
+scikit-learn
