@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detection Metrics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <h2 style="text-align:center;">Weapon Detection Metrics</h2>
+
+    <table class="metrics-table">
+        <tr>
+            <th>Metric</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Accuracy</td>
+            <td>{{ accuracy }}%</td>
+        </tr>
+        <tr>
+            <td>Average IOU</td>
+            <td>{{ avg_iou }}</td>
+        </tr>
+    </table>
+
+    <br>
+
+    <h3 style="text-align:center;">Confusion Matrix</h3>
+    <table class="metrics-table">
+        <tr>
+            <th></th>
+            <th>Predicted: Gun</th>
+            <th>Predicted: Knife</th>
+        </tr>
+        <tr>
+            <th>Actual: Gun</th>
+            <td>{{ confusion_matrix[0][0] }}</td>
+            <td>{{ confusion_matrix[0][1] }}</td>
+        </tr>
+        <tr>
+            <th>Actual: Knife</th>
+            <td>{{ confusion_matrix[1][0] }}</td>
+            <td>{{ confusion_matrix[1][1] }}</td>
+        </tr>
+    </table>
+
+    <a href="{{ url_for('result', filename=filename) }}" class="back-btn">← Back to Detection Result</a>
+</body>
+</html>

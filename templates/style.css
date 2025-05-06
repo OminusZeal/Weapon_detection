@@ -1,0 +1,22 @@
+body{
+        background-image: url("/static/bg.jpeg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+        padding-top: 100px;
+}
+
+form {
+        background-color: rgba(0, 0, 0, 0.6);
+        display: inline-block;
+        padding: 20px;
+        border-radius: 10px;
+}
+
+input, button {
+        padding: 10px;
+        margin: 10px;
+    }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Camera Capture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #videoElement {
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid black;
+        }
+        #captureButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #captureButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Camera Weapon Detection</h1>
+
+    <!-- Video element to display webcam feed -->
+    <video id="videoElement" autoplay></video>
+
+    <button id="captureButton" onclick="captureImage()">Capture Image for Detection</button>
+
+    <!-- Display the result after detection -->
+    <div id="result">
+        <h3>Detection Result:</h3>
+        <img id="resultImage" src="" alt="Result Image" style="max-width: 600px; display: none;">
+        <p id="resultText"></p>
+    </div>
+
+    <script>
+        // Initialize the webcam stream and display it in the video element
+        const video = document.getElementById('videoElement');
+        const resultImage = document.getElementById('resultImage');
+        const resultText = document.getElementById('resultText');
+        
+        // Request webcam access
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.log("Error accessing webcam: ", err);
+            });
+
+        // Capture the image from the webcam and send it to the server
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            const targetWidth = 320;
+            const targetHeight = 240;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+        
+            const ctx = canvas.getContext('2d');
+        
+            // Calculate the scaled dimensions and offsets to center the image
+            const videoAspect = video.videoWidth / video.videoHeight;
+            const canvasAspect = targetWidth / targetHeight;
+        
+            let drawWidth, drawHeight, offsetX, offsetY;
+        
+            if (videoAspect > canvasAspect) {
+                // Video is wider
+                drawHeight = targetHeight;
+                drawWidth = video.videoWidth * (targetHeight / video.videoHeight);
+                offsetX = -(drawWidth - targetWidth) / 2;
+                offsetY = 0;
+            } else {
+                // Video is taller
+                drawWidth = targetWidth;
+                drawHeight = video.videoHeight * (targetWidth / video.videoWidth);
+                offsetX = 0;
+                offsetY = -(drawHeight - targetHeight) / 2;
+            }
+        
+            ctx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
+        
+            const imageData = canvas.toDataURL('image/png');
+        
+            fetch('/capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'image=' + encodeURIComponent(imageData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result_image) {
+                    window.location.href = `/result/${data.result_image}`;
+                } else {
+                    alert("Detection failed: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error during image capture or detection:", error);
+            });
+        }        
+    </script>
+</body>
+</html>

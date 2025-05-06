@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detection Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .output-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        img {
+            max-width: 600px;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+        .download-btn, .back-btn, .metrics-btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 24px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .metrics-btn:hover, .download-btn:hover, .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Weapon Detection Result</h2>
+    <div class="output-section">
+        <img src="{{ url_for('send_output_file', filename=filename) }}" alt="Detected Image">
+        <br>
+        <a href="{{ url_for('send_output_file', filename=filename) }}" download class="download-btn">Download Image</a>
+        <br><br>
+        <a href="{{ url_for('index') }}" class="back-btn">Go Back</a>
+        <br><br>
+
+        <!-- Buttons to choose between SVM or Random Forest metrics -->
+        <a href="{{ url_for('detection_result', filename=filename, model='SVM') }}" class="metrics-btn">View SVM Metrics</a>
+        <a href="{{ url_for('detection_result', filename=filename, model='RandomForest') }}" class="metrics-btn">View Random Forest Metrics</a>
+    </div>
+</body>
+</html>
